@@ -57,6 +57,7 @@ ChatBot::ChatBot(const ChatBot& other)
     {
         _image = new wxBitmap(*(other._image));
     }
+    if (_chatLogic != NULL) _chatLogic->SetChatbotHandle(this);
 }
 
 // Copy assignment operator
@@ -73,6 +74,7 @@ ChatBot& ChatBot::operator=(const ChatBot& other)
         {
             _image = new wxBitmap(*(other._image));
         }
+        if (_chatLogic != NULL) _chatLogic->SetChatbotHandle(this);
     }
     return *this;
 }
@@ -85,7 +87,7 @@ ChatBot::ChatBot(ChatBot&& other)
     _chatLogic = other._chatLogic;
     _rootNode = other._rootNode;
     _image = other._image;
-    _chatLogic->SetChatbotHandle(this);
+    if (_chatLogic != NULL) _chatLogic->SetChatbotHandle(this);
     other._chatLogic = nullptr;
     other._rootNode = nullptr;
     other._image = nullptr;
@@ -101,7 +103,7 @@ ChatBot& ChatBot::operator=(ChatBot&& other)
         _rootNode = other._rootNode;
         if (_image != NULL) delete _image;
         _image = other._image;
-        _chatLogic->SetChatbotHandle(this);
+        if (_chatLogic != NULL) _chatLogic->SetChatbotHandle(this);
         other._chatLogic = nullptr;
         other._rootNode = nullptr;
         other._image = nullptr;
