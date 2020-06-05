@@ -48,8 +48,9 @@ ChatBot::ChatBot(const ChatBot& other)
     std::cout << "ChatBot COPY Constructor" << std::endl;
     
     // invalidate data handles
-    _chatLogic = nullptr;
-    _rootNode = nullptr;
+    _chatLogic = other._chatLogic;
+    _rootNode = other._rootNode;
+    if (_image != NULL) delete _image;
     _image = nullptr;
     // load image into heap memory
     if (other._image != NULL)
@@ -64,7 +65,9 @@ ChatBot& ChatBot::operator=(const ChatBot& other)
     std::cout << "ChatBot COPY operator" << std::endl;
 
     if (&other != this) {
-        delete _image;
+        _chatLogic = other._chatLogic;
+        _rootNode = other._rootNode;
+        if (_image != NULL) delete _image;
         _image = nullptr;
         if (other._image != NULL)
         {
@@ -79,7 +82,12 @@ ChatBot::ChatBot(ChatBot&& other)
 {
     std::cout << "ChatBot MOVE constructor" << std::endl;
 
+    _chatLogic = other._chatLogic;
+    _rootNode = other._rootNode;
     _image = other._image;
+    _chatLogic->SetChatbotHandle(this);
+    other._chatLogic = nullptr;
+    other._rootNode = nullptr;
     other._image = nullptr;
 }
 
@@ -89,8 +97,13 @@ ChatBot& ChatBot::operator=(ChatBot&& other)
     std::cout << "ChatBot MOVE operator" << std::endl;
 
     if (&other != this) {
-        delete _image;
+        _chatLogic = other._chatLogic;
+        _rootNode = other._rootNode;
+        if (_image != NULL) delete _image;
         _image = other._image;
+        _chatLogic->SetChatbotHandle(this);
+        other._chatLogic = nullptr;
+        other._rootNode = nullptr;
         other._image = nullptr;
     }
     return *this;
